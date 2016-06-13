@@ -10,6 +10,8 @@ public class SearchItem implements Parcelable {
     private CharSequence text;
     private int type;
 
+    SearchItem(){}
+
     public SearchItem(CharSequence text) {
         this(SearchType.SEARCH_SUGGEST, text);
     }
