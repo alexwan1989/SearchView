@@ -76,7 +76,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ResultView
                     history.addAll(mSuggestionsList);
 
                     for (SearchItem str : history) {
-                        String string = str.get_text().toString().toLowerCase(Locale.getDefault());
+                        String string = str.getText().toString().toLowerCase(Locale.getDefault());
                         if (string.contains(key)) {
                             results.add(str);
                         }
@@ -125,19 +125,22 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ResultView
     @Override
     public void onBindViewHolder(ResultViewHolder viewHolder, int position) {
         SearchItem item = mResultList.get(position);
-
-        viewHolder.icon_left.setImageResource(item.get_icon());
+        if(item.getType() == SearchItem.SearchType.SEARCH_HISTORY.getValue()){
+            viewHolder.icon_left.setImageResource(R.drawable.search_ic_search_black_24dp);
+        }else{
+            viewHolder.icon_left.setImageResource(R.drawable.search_ic_history_black_24dp);
+        }
         viewHolder.icon_left.setColorFilter(SearchView.getIconColor(), PorterDuff.Mode.SRC_IN);
         viewHolder.text.setTextColor(SearchView.getTextColor());
 
-        String string = item.get_text().toString().toLowerCase(Locale.getDefault());
+        String string = item.getText().toString().toLowerCase(Locale.getDefault());
 
         if (string.contains(key)) {
             SpannableString s = new SpannableString(string);
             s.setSpan(new ForegroundColorSpan(SearchView.getTextHighlightColor()), string.indexOf(key), string.indexOf(key) + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             viewHolder.text.setText(s, TextView.BufferType.SPANNABLE);
         } else {
-            viewHolder.text.setText(item.get_text());
+            viewHolder.text.setText(item.getText());
         }
     }
 
@@ -175,8 +178,3 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ResultView
     }
 
 }
-
-/*else {
-            s.removeSpan(new ForegroundColorSpan(SearchView.getTextColor()));
-            viewHolder.text.setText(s, TextView.BufferType.SPANNABLE);
-}*/

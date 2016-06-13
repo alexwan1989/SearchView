@@ -7,49 +7,36 @@ import android.text.TextUtils;
 
 public class SearchItem implements Parcelable {
 
-    public static final Parcelable.Creator<SearchItem> CREATOR = new Parcelable.Creator<SearchItem>() {
-        public SearchItem createFromParcel(Parcel source) {
-            return new SearchItem(source);
-        }
-
-        public SearchItem[] newArray(int size) {
-            return new SearchItem[size];
-        }
-    };
-    private int icon;
     private CharSequence text;
-
-    SearchItem() {
-    }
+    private int type;
 
     public SearchItem(CharSequence text) {
-        this(R.drawable.search_ic_search_black_24dp, text);
+        this(SearchType.SEARCH_SUGGEST, text);
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public SearchItem(int icon, CharSequence text) {
-        this.icon = icon;
+    public SearchItem(SearchType type, CharSequence text) {
+        this.type = type.getValue();
         this.text = text;
     }
 
     private SearchItem(Parcel in) {
-        this.icon = in.readInt();
+        this.type = in.readInt();
         this.text = in.readParcelable(CharSequence.class.getClassLoader());
     }
 
-    int get_icon() {
-        return this.icon;
+    public int getType() {
+        return type;
     }
 
-    void set_icon(int icon) {
-        this.icon = icon;
+    public void setType(SearchType type) {
+        this.type = type.getValue();
     }
 
-    CharSequence get_text() {
+    CharSequence getText() {
         return this.text;
     }
 
-    void set_text(CharSequence text) {
+    void setText(CharSequence text) {
         this.text = text;
     }
 
@@ -60,8 +47,34 @@ public class SearchItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.icon);
+        dest.writeInt(this.type);
         TextUtils.writeToParcel(this.text, dest, flags); // dest.writeValue(this.text);
     }
 
+    public static final Parcelable.Creator<SearchItem> CREATOR =
+            new Parcelable.Creator<SearchItem>() {
+                public SearchItem createFromParcel(Parcel source) {
+                    return new SearchItem(source);
+                }
+
+                public SearchItem[] newArray(int size) {
+                    return new SearchItem[size];
+                }
+            };
+
+    public enum SearchType {
+
+        SEARCH_HISTORY(1),
+        SEARCH_SUGGEST(2);
+
+        private int value;
+
+        SearchType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+    }
 }
