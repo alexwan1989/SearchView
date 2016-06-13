@@ -1,6 +1,7 @@
 package com.lapism.searchview;
 
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -9,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
@@ -19,23 +21,27 @@ import android.util.Property;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 // from AppCompat
+
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class SearchArrowDrawable extends Drawable {
 
     static final float STATE_ARROW = 0.0f;
     static final float STATE_HAMBURGER = 1.0f;
 
     private static final float ARROW_HEAD_ANGLE = (float) Math.toRadians(45.0);
-    private static final Property<SearchArrowDrawable, Float> PROGRESS = new Property<SearchArrowDrawable, Float>(Float.class, "progress") {
-        @Override
-        public void set(SearchArrowDrawable object, Float value) {
-            object.setProgress(value);
-        }
 
-        @Override
-        public Float get(SearchArrowDrawable object) {
-            return object.getProgress();
-        }
-    };
+    private static final Property<SearchArrowDrawable, Float> PROGRESS =
+            new Property<SearchArrowDrawable, Float>(Float.class, "progress") {
+                @Override
+                public void set(SearchArrowDrawable object, Float value) {
+                    object.setProgress(value);
+                }
+
+                @Override
+                public Float get(SearchArrowDrawable object) {
+                    return object.getProgress();
+                }
+            };
     private final Paint mPaint = new Paint();
     private final Path mPath = new Path();
     private final float mBarGap;
